@@ -2,6 +2,7 @@
 
     namespace Yeager\Framework\HTTP;
 
+    use Doctrine\DBAL\Connection;
     use Exception;
     use League\Container\Container;
     use Yeager\Framework\Routing\IRouter;
@@ -25,6 +26,7 @@
         public function handle(Request $request): Response
         {
             try {
+
                 [$routeHandler, $variables] = $this->router->dispatch($request, $this->container);
 
                 $response = call_user_func_array($routeHandler, $variables);
