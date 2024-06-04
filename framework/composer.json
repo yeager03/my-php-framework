@@ -1,0 +1,20 @@
+{
+	"name": "yeager/php-framework",
+	"authors": [
+		{
+			"name": "yeager03",
+			"email": "watchmalikov27@gmail.com"
+		}
+	],
+	"minimum-stability": "dev",
+	"autoload": {
+		"psr-4": {
+			"Yeager\\Framework\\": "src"
+		}
+	},
+	"require": {
+		"nikic/fast-route": "^1.3",
+		"league/container": "^4.2.0",
+		"symfony/dotenv": "^6.3.0"
+	}
+}
