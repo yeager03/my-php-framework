@@ -2,10 +2,11 @@
 
     namespace App\Controllers;
 
-    use App\Services\PostsService;
+    use Yeager\Framework\Controller\BaseController;
     use Yeager\Framework\HTTP\Response;
+    use App\Services\PostsService;
 
-    class PostsController
+    class PostsController extends BaseController
     {
         private readonly PostsService $postsService;
 
@@ -16,9 +17,10 @@
 
         public function index(): Response
         {
-            $content = json_encode($this->postsService->getPosts());
+            $title = "Posts page";
+            $posts = $this->postsService->getPosts();
 
-            return new Response($content);
+            return $this->render("posts.html.twig", compact("posts", "title"));
         }
 
         public function show(int $id): Response
@@ -26,5 +28,12 @@
             $content = "<h1>Post #{$id}</h1>";
 
             return new Response($content);
+        }
+
+        public function create(): Response
+        {
+            $title = "Create post page";
+
+            return $this->render("create_post.html.twig", compact( "title"));
         }
     }

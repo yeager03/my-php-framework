@@ -9,6 +9,7 @@
 
         Route::get("/posts", [PostsController::class, "index"]),
         Route::get("/posts/{id:\d+}", [PostsController::class, "show"]),
+        Route::get("/posts/create", [PostsController::class, "create"]),
 
         Route::get("/hello/{name}", function (string $name) {
             return new \Yeager\Framework\HTTP\Response("Hello, {$name}!");

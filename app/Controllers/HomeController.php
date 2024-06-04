@@ -2,14 +2,16 @@
 
     namespace App\Controllers;
 
+    use Yeager\Framework\Controller\BaseController;
     use Yeager\Framework\HTTP\Response;
 
-    class HomeController
+    class HomeController extends BaseController
     {
         public function index(): Response
         {
-            $content = "<h1>Home Page!</h1>";
+            $name = "Alex";
+            $title = "Home page";
 
-            return new Response($content);
+            return $this->render("home.html.twig", compact("name", "title"));
         }
     }

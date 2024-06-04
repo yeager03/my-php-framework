@@ -4,11 +4,11 @@
 
     class Response
     {
-        private mixed $content;
+        private string $content;
         private int $statusCode;
         private array $headers;
 
-        public function __construct(mixed $content, int $statusCode = 200, array $headers = [])
+        public function __construct(string $content = "", int $statusCode = 200, array $headers = [])
         {
             $this->content = $content;
             $this->statusCode = $statusCode;
@@ -20,5 +20,12 @@
         public function send(): void
         {
             echo $this->content;
+        }
+
+        public function setContent(string $content): Response
+        {
+            $this->content = $content;
+
+            return $this;
         }
     }

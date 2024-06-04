@@ -1,0 +1,22 @@
+{% extends "default.html.twig" %}
+
+
+{% block main %}
+    <div class="container">
+        <h1>Create post</h1>
+        <form action="#">
+            <label for="title">
+                Title <br>
+                <input type="text" id="title" name="title" placeholder="Post title...">
+            </label>
+            <br>
+            <label for="description">
+                Description <br>
+                <textarea id="description" name="description" placeholder="Post description...">
+                </textarea>
+            </label>
+            <br>
+            <button type="submit">Create</button>
+        </form>
+    </div>
+{% endblock %}
