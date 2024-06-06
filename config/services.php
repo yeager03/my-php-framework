@@ -5,6 +5,7 @@
     use League\Container\Container;
     use League\Container\ReflectionContainer;
     use Yeager\Framework\Console\Application;
+    use Yeager\Framework\Console\Commands\MigrateCommand;
     use Yeager\Framework\Controller\BaseController;
     use Yeager\Framework\Dbal\ConnectionFactory;
     use Yeager\Framework\Routing\IRouter;
@@ -66,5 +67,9 @@
     $container->add(ConsoleKernel::class)
         ->addArgument($container)
         ->addArgument(Application::class);
+
+    $container->add("console:migrate", MigrateCommand::class)
+        ->addArgument(Connection::class)
+        ->addArgument(new StringArgument(BASE_PATH . "/database/migrations"));
 
     return $container;

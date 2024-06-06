@@ -1,14 +1,17 @@
 <?php
 
 
+    use Doctrine\DBAL\Schema\Schema;
+    use Doctrine\DBAL\Types\Types;
+
     return new class {
-        public function up(): void
+        public function up(Schema $schema): void
         {
-            echo get_class($this) . " method up" . PHP_EOL;
+           //
         }
 
-        public function down(): void
+        public function down(Schema $schema): void
         {
-            echo get_class($this) . " method down" . PHP_EOL;
+            //
         }
     };
