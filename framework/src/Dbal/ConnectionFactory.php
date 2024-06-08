@@ -20,12 +20,8 @@
          */
         public function create(): Connection
         {
-            $connection =  DriverManager::getConnection([
+            return DriverManager::getConnection([
                 "url" => $this->DATABASE_URL
             ]);
-
-            $connection->setAutoCommit(false);
-
-            return $connection;
         }
     }

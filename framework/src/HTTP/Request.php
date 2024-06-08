@@ -5,7 +5,7 @@
     class Request
     {
         private readonly array $GET;
-        private readonly array $POST;
+        public readonly array $POST;
         private readonly array $COOKIES;
         private readonly array $FILES;
         private readonly array $SERVER;

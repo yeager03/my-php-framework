@@ -5,6 +5,7 @@
     use FastRoute\Dispatcher;
     use FastRoute\RouteCollector;
     use League\Container\Container;
+    use Yeager\Framework\Controller\BaseController;
     use Yeager\Framework\HTTP\Exceptions\MethodNotAllowedException;
     use Yeager\Framework\HTTP\Exceptions\RouteNotFoundException;
     use Yeager\Framework\HTTP\Request;
@@ -31,6 +32,11 @@
             if (is_array($handler)) {
                 [$controllerId, $method] = $handler;
                 $controller = $container->get($controllerId);
+
+                if (is_subclass_of($controller, BaseController::class)) {
+                    $controller->setRequest($request);
+                }
+
                 $handler = [$controller, $method];
             }
 

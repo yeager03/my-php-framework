@@ -31,6 +31,8 @@
         public function execute(array $parameters = []): int
         {
             try {
+                $this->connection->setAutoCommit(false);
+
                 $this->createMigrationsTable();
 
                 $this->connection->beginTransaction();
@@ -64,6 +66,7 @@
                 throw $exception;
             }
 
+            $this->connection->setAutoCommit(true);
 
             return 0;
         }

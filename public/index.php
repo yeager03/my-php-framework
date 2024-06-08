@@ -1,6 +1,7 @@
 <?php
 
     define("BASE_PATH", dirname(__DIR__));
+    define("WWW", "https://php-frameworkkz.lndo.site");
 
     require_once BASE_PATH . "/vendor/autoload.php";
 

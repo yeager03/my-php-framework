@@ -9,15 +9,22 @@
     use Twig\Error\LoaderError;
     use Twig\Error\RuntimeError;
     use Twig\Error\SyntaxError;
+    use Yeager\Framework\HTTP\Request;
     use Yeager\Framework\HTTP\Response;
 
     abstract class BaseController
     {
         protected ContainerInterface|null $container = null;
+        protected Request $request;
 
         public function setContainer(ContainerInterface $container): void
         {
             $this->container = $container;
+        }
+
+        public function setRequest(Request $request): void
+        {
+            $this->request = $request;
         }
 
         /**
@@ -35,6 +42,8 @@
             if (is_null($response)) {
                 $response = new Response();
             }
+
+            $params["WWW"] = WWW;
 
             $content = $twig->render($view, $params);
 

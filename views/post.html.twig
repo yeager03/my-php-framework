@@ -1,0 +1,11 @@
+{% extends 'layouts/default.html.twig' %}
+
+{% block main %}
+    <section class="post">
+        <div class="container">
+            <span class="subtitle">Пост {{ post.id }}</span>
+            <h1 class="title">{{ post.title }}</h1>
+            <p class="description">{{ post.description }}</p>
+        </div>
+    </section>
+{% endblock %}

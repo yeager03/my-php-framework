@@ -1,13 +1,9 @@
-{% extends "default.html.twig" %}
-
+{% extends 'layouts/default.html.twig' %}
 
 {% block main %}
-    <div class="container">
-        <h1>My posts</h1>
-        <ul>
-            {% for post in posts %}
-                <li>{{ post.title }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+    <section class="posts">
+        <div class="container">
+            <h1 class="title">Посты</h1>
+        </div>
+    </section>
 {% endblock %}

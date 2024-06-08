@@ -1,22 +1,18 @@
-{% extends "default.html.twig" %}
-
+{% extends 'layouts/default.html.twig' %}
 
 {% block main %}
-    <div class="container">
-        <h1>Create post</h1>
-        <form action="#">
-            <label for="title">
-                Title <br>
-                <input type="text" id="title" name="title" placeholder="Post title...">
-            </label>
-            <br>
-            <label for="description">
-                Description <br>
-                <textarea id="description" name="description" placeholder="Post description...">
-                </textarea>
-            </label>
-            <br>
-            <button type="submit">Create</button>
-        </form>
-    </div>
+    <section class="posts-create">
+        <div class="container">
+            <h1 class="title posts-create__title">Создание поста</h1>
+            <form action="/posts" method="post" class="form posts-create__form">
+                <div class="form__field">
+                    <input type="text" name="title" class="form__input" placeholder="Заголовок" required>
+                </div>
+                <div class="form__field">
+                    <textarea name="description" rows="10" class="form__textarea" placeholder="Описание" required ></textarea>
+                </div>
+                <button type="submit" class="button form__button">Добавить пост</button>
+            </form>
+        </div>
+    </section>
 {% endblock %}
