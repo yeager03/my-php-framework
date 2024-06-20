@@ -17,11 +17,11 @@
             $this->connection = $connection;
         }
 
-        public function find_one(int $id): Post|null
+        public function findOne(int $id): Post|null
         {
             $queryBuilder = $this->connection->createQueryBuilder();
 
-            $result = $queryBuilder
+            $post = $queryBuilder
                 ->select("*")
                 ->from("posts")
                 ->where("id = :id")
@@ -29,15 +29,15 @@
                 ->executeQuery()
                 ->fetchAssociative();
 
-            if (!$result) {
+            if (!$post) {
                 return null;
             }
 
             return Post::create(
-                title: $result["title"],
-                description: $result["description"],
-                id: $result["id"],
-                created_at: new DateTimeImmutable($result["created_at"]),
+                title: $post["title"],
+                description: $post["description"],
+                id: $post["id"],
+                created_at: new DateTimeImmutable($post["created_at"]),
             );
         }
 
@@ -47,7 +47,7 @@
          */
         public function findOrFail(int $id): Post
         {
-            $post = $this->find_one($id);
+            $post = $this->findOne($id);
 
             if(is_null($post)) {
                 throw new NotFoundException("Post with id: {$id} not found");

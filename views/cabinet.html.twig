@@ -1,0 +1,14 @@
+{% extends 'layouts/default.html.twig' %}
+
+{% block main %}
+    <section class="home">
+        <div class="container">
+            {% if session().hasFlash("success") %}
+                <div class="alert alert--success">
+                    {{ session().getFlash("success")[0] }}
+                </div>
+            {% endif %}
+            <h1 class="title">Как дела? Пользователь...</h1>
+        </div>
+    </section>
+{% endblock %}

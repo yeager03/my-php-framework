@@ -31,11 +31,9 @@
         public function execute(array $parameters = []): int
         {
             try {
-                $this->connection->setAutoCommit(false);
 
                 $this->createMigrationsTable();
 
-                $this->connection->beginTransaction();
 
                 $appliedMigrations = $this->getAppliedMigrations();
 
@@ -59,14 +57,9 @@
                     $this->connection->executeQuery($sql);
                 }
 
-                $this->connection->commit();
             } catch (Throwable $exception) {
-                $this->connection->rollBack();
-
                 throw $exception;
             }
-
-            $this->connection->setAutoCommit(true);
 
             return 0;
         }

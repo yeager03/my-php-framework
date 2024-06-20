@@ -1,13 +1,20 @@
 <?php
 
+    use App\Services\UserService;
     use League\Container\Argument\Literal\ArrayArgument;
     use League\Container\Argument\Literal\StringArgument;
     use League\Container\Container;
     use League\Container\ReflectionContainer;
+    use Yeager\Framework\Authentication\ISessionAuthentication;
+    use Yeager\Framework\Authentication\SessionAuthentication;
     use Yeager\Framework\Console\Application;
     use Yeager\Framework\Console\Commands\MigrateCommand;
     use Yeager\Framework\Controller\BaseController;
     use Yeager\Framework\Dbal\ConnectionFactory;
+    use Yeager\Framework\HTTP\Middleware\ExtractRouteInfo;
+    use Yeager\Framework\HTTP\Middleware\IRequestHandler;
+    use Yeager\Framework\HTTP\Middleware\RequestHandler;
+    use Yeager\Framework\HTTP\Middleware\RouterDispatch;
     use Yeager\Framework\Routing\IRouter;
     use Yeager\Framework\Routing\Router;
     use Yeager\Framework\HTTP\Kernel;
@@ -16,6 +23,9 @@
     use Twig\Loader\FilesystemLoader;
     use Twig\Environment;
     use Doctrine\DBAL\Connection;
+    use Yeager\Framework\Session\ISession;
+    use Yeager\Framework\Session\Session;
+    use Yeager\Framework\Template\TwigFactory;
 
     // Dot env
     $dotenv = new Dotenv();
@@ -38,18 +48,28 @@
 
     $container->add(IRouter::class, Router::class);
 
-    $container->extend(IRouter::class)
-        ->addMethodCall("registerRoutes", [new ArrayArgument($routes)]);
-
-    $container->add(Kernel::class)
-        ->addArgument(IRouter::class)
+    $container->add(IRequestHandler::class, RequestHandler::class)
         ->addArgument($container);
 
-    $container->addShared("twig-loader", FilesystemLoader::class)
-        ->addArgument(new StringArgument($VIEWS_PATH));
+    $container->add(Kernel::class)
+        ->addArguments([
+            IRouter::class,
+            $container,
+            IRequestHandler::class
+        ]);
 
-    $container->addShared("twig", Environment::class)
-        ->addArgument("twig-loader");
+    $container->addShared(ISession::class, Session::class);
+
+    $container->add("twig-factory", TwigFactory::class)
+        ->addArguments([
+            new StringArgument($VIEWS_PATH),
+            ISession::class,
+            ISessionAuthentication::class
+        ]);
+
+    $container->addShared("twig", function () use ($container) {
+        return $container->get("twig-factory")->create();
+    });
 
     $container->inflector(BaseController::class)
         ->invokeMethod("setContainer", [$container]);
@@ -71,5 +91,20 @@
     $container->add("console:migrate", MigrateCommand::class)
         ->addArgument(Connection::class)
         ->addArgument(new StringArgument(BASE_PATH . "/database/migrations"));
+
+    $container->add(RouterDispatch::class)
+        ->addArguments([
+            IRouter::class,
+            $container
+        ]);
+
+    $container->add(ISessionAuthentication::class, SessionAuthentication::class)
+        ->addArguments([
+            UserService::class,
+            ISession::class
+        ]);
+
+    $container->add(ExtractRouteInfo::class)
+        ->addArgument(new ArrayArgument($routes));
 
     return $container;

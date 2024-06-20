@@ -19,14 +19,24 @@
             </nav>
 
             <div class="account">
-                <a href="/sign-in" class="account__wrapper">
+                {% if auth().check() %}
+                    <form action="/logout" method="post">
+                        <button class="account__wrapper account__wrapper--danger">
+                        <span class="account__text">
+                            Выход
+                        </span>
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="/sign-in" class="account__wrapper">
                     <span class="account__icon"
                           style="background-image: url('{{ WWW }}/public/assets/icons/login.svg')">
                     </span>
-                    <span class="account__text">
+                        <span class="account__text">
                         Личный кабинет
                     </span>
-                </a>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>

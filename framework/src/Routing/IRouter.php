@@ -8,6 +8,4 @@
     interface IRouter
     {
         public function dispatch(Request $request, Container $container): array;
-
-        public function registerRoutes(array $routes): void;
     }

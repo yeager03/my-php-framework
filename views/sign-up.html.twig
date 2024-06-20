@@ -1,0 +1,42 @@
+{% extends 'layouts/default.html.twig' %}
+
+{% block main %}
+    <section class="sign-up">
+        <div class="container">
+            <div class="sign-up__wrapper">
+                <div class="sign-up__form">
+                    <h1 class="title sign-up__title">Регистрация</h1>
+                    {% if session().hasFlash("error") %}
+                        <div class="alert alert--danger">
+                            <ul>
+                                {% for error in session().getFlash("error") %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+                    {% if session().hasFlash("success") %}
+                        <div class="alert alert--success">
+                            {{ session().getFlash("success")[0] }}
+                        </div>
+                    {% endif %}
+                    <form action="/sign-up" method="post" class="form">
+                        <div class="form__field">
+                            <input type="email" name="email" class="form__input" placeholder="Введите ваш email"
+                                   required>
+                        </div>
+                        <div class="form__field">
+                            <input type="text" name="name" class="form__input" placeholder="Введите ваше имя" required>
+                        </div>
+                        <div class="form__field">
+                            <input type="password" name="password" class="form__input" placeholder="Введите ваш пароль"
+                                   required>
+                        </div>
+                        <p class="form__info">Уже есть аккаунт? <a href="/sign-in">Войти</a></p>
+                        <button type="submit" class="button form__button">Зарегистрироваться</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

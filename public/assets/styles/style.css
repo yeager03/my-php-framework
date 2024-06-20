@@ -101,18 +101,31 @@ ul {
 }
 
 .account__wrapper {
+	outline: none;
+	border: none;
+
+	cursor: pointer;
+
 	display: flex;
 	align-items: center;
 
 	padding: 10px;
 
 	transition: background-color .2s ease-out;
-	background-color: var(--accent);
+	background: var(--accent) none;
 
 }
 
 .account__wrapper:hover {
 	background-color: var(--accent);
+}
+
+.account__wrapper--danger {
+	background-color: #6e0000;
+}
+
+.account__wrapper--danger:hover {
+	background-color: #940000;
 }
 
 .account__icon {
@@ -163,6 +176,14 @@ ul {
 	display: flex;
 	flex-direction: column;
 	gap: 20px;
+}
+
+.form__info {
+	font-size: 14px;
+}
+
+.form__info a {
+	color: dodgerblue;
 }
 
 .form__field {
@@ -225,5 +246,39 @@ ul {
 
 /* post */
 
+.alert {
+	border-radius: 5px;
+	padding: 15px;
+	color: #fff;
+	margin-bottom: 20px;
+}
 
+.alert--success {
+	background-color: #3d6634;
+}
 
+.alert--danger {
+	background-color: #6e0000;
+}
+
+/* sign-in sign-up */
+.sign-in, .sign-up {
+	width: 100%;
+}
+
+.sign-in__wrapper, .sign-up__wrapper {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.sign-in__form, .sign-up__form {
+	max-width: 400px;
+	width: 100%;
+}
+
+.sign-in__title, .sign-up__title {
+	text-align: center;
+	margin-bottom: 20px;
+}

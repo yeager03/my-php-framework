@@ -28,4 +28,14 @@
 
             return $this;
         }
+
+        public function getHeader(string $key): string
+        {
+            return $this->headers[$key];
+        }
+
+        public function getStatusCode(): int
+        {
+            return $this->statusCode;
+        }
     }

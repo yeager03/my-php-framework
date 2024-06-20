@@ -3,6 +3,13 @@
 {% block main %}
     <section class="post">
         <div class="container">
+            {% if session().hasFlash("success") %}
+                <div class="alert alert--success">
+                    {% for message in session().getFlash("success") %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
             <span class="subtitle">Пост {{ post.id }}</span>
             <h1 class="title">{{ post.title }}</h1>
             <p class="description">{{ post.description }}</p>

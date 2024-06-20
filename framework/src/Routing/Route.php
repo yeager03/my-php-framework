@@ -4,13 +4,13 @@
 
     class Route
     {
-        public static function get(string $uri, array|callable $handler): array
+        public static function get(string $uri, array|callable $handler, array $middlewares = []): array
         {
-            return ["GET", $uri, $handler];
+            return ["GET", $uri, [$handler, $middlewares]];
         }
 
-        public static function post(string $uri, array|callable $handler): array
+        public static function post(string $uri, array|callable $handler, array $middlewares = []): array
         {
-            return ["POST", $uri, $handler];
+            return ["POST", $uri, [$handler, $middlewares]];
         }
     }
