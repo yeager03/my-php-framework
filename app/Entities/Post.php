@@ -3,8 +3,9 @@
     namespace App\Entities;
 
     use DateTimeImmutable;
+    use Yeager\Framework\Dbal\Entity;
 
-    class Post
+    class Post extends Entity
     {
         private int|null $id;
         private string $title;

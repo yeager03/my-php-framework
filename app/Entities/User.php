@@ -4,8 +4,9 @@
 
     use DateTimeImmutable;
     use Yeager\Framework\Authentication\IAuthUser;
+    use Yeager\Framework\Dbal\Entity;
 
-    class User implements IAuthUser
+    class User extends Entity implements IAuthUser
     {
         private int|null $id;
         private string $email;

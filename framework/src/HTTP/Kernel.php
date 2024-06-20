@@ -2,25 +2,25 @@
 
     namespace Yeager\Framework\HTTP;
 
-    use Doctrine\DBAL\Connection;
     use Exception;
     use League\Container\Container;
+    use Yeager\Framework\Event\EventDispatcher;
+    use Yeager\Framework\HTTP\Events\ResponseEvent;
     use Yeager\Framework\HTTP\Middleware\IRequestHandler;
-    use Yeager\Framework\Routing\IRouter;
     use Yeager\Framework\HTTP\Exceptions\HTTPException;
 
     class Kernel
     {
-        private IRouter $router;
-        private Container $container;
-        private IRequestHandler $requestHandler;
+        private readonly Container $container;
+        private readonly IRequestHandler $requestHandler;
+        private readonly EventDispatcher $eventDispatcher;
         private string $environment;
 
-        public function __construct(IRouter $router, Container $container, IRequestHandler $requestHandler)
+        public function __construct(Container $container, IRequestHandler $requestHandler, EventDispatcher $eventDispatcher)
         {
-            $this->router = $router;
             $this->container = $container;
             $this->requestHandler = $requestHandler;
+            $this->eventDispatcher = $eventDispatcher;
 
             $this->environment = $this->container->get("APP_ENV");
         }
@@ -29,13 +29,11 @@
         {
             try {
                 $response = $this->requestHandler->handle($request);
-
-//                [$routeHandler, $variables] = $this->router->dispatch($request, $this->container);
-//
-//                $response = call_user_func_array($routeHandler, $variables);
             } catch (Exception $exception) {
                 $response = $this->createExceptionResponse($exception);
             }
+
+            $this->eventDispatcher->dispatch(new ResponseEvent($request, $response));
 
             return $response;
         }
@@ -60,6 +58,4 @@
 
             return new Response("Server error", 500);
         }
-
-
     }

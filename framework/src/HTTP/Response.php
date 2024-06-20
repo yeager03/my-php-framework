@@ -19,7 +19,15 @@
 
         public function send(): void
         {
+            ob_start();
+
+            foreach ($this->headers as $key => $value) {
+                header("{$key}: {$value}");
+            }
+
             echo $this->content;
+
+            ob_end_flush();
         }
 
         public function setContent(string $content): Response
@@ -37,5 +45,25 @@
         public function getStatusCode(): int
         {
             return $this->statusCode;
+        }
+
+        public function getHeaders(): array
+        {
+            return $this->headers;
+        }
+
+        public function setHeader(string $key, mixed $value): void
+        {
+            $this->headers[$key] = $value;
+        }
+
+        public function getContent(): string
+        {
+            return $this->content;
+        }
+
+        public function setStatusCode(int $statusCode): void
+        {
+            $this->statusCode = $statusCode;
         }
     }

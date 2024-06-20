@@ -4,22 +4,22 @@
 
     use App\Entities\User;
     use DateTimeImmutable;
-    use Doctrine\DBAL\Connection;
     use Yeager\Framework\Authentication\IAuthUser;
     use Yeager\Framework\Authentication\IUserService;
+    use Yeager\Framework\Dbal\EntityService;
 
     class UserService implements IUserService
     {
-        private Connection $connection;
+        private EntityService $entityService;
 
-        public function __construct(Connection $connection)
+        public function __construct(EntityService $entityService)
         {
-            $this->connection = $connection;
+            $this->entityService = $entityService;
         }
 
         public function save(User $user): User
         {
-            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder = $this->entityService->getConnection()->createQueryBuilder();
 
             $queryBuilder
                 ->insert("users")
@@ -37,7 +37,7 @@
                 ])
                 ->executeQuery();
 
-            $id = $this->connection->lastInsertId();
+            $id = $this->entityService->save($user);
 
             $user->setId($id);
 
@@ -47,7 +47,7 @@
 
         public function findByEmail(string $email): IAuthUser|null
         {
-            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder = $this->entityService->getConnection()->createQueryBuilder();
 
             $user = $queryBuilder
                 ->select("*")

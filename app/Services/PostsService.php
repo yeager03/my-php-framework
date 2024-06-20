@@ -4,22 +4,21 @@
 
     use App\Entities\Post;
     use DateTimeImmutable;
-    use Doctrine\DBAL\Connection;
+    use Yeager\Framework\Dbal\EntityService;
     use Yeager\Framework\HTTP\Exceptions\NotFoundException;
 
     class PostsService
     {
+        private EntityService $entityService;
 
-        private Connection $connection;
-
-        public function __construct(Connection $connection)
+        public function __construct(EntityService $entityService)
         {
-            $this->connection = $connection;
+            $this->entityService = $entityService;
         }
 
         public function findOne(int $id): Post|null
         {
-            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder = $this->entityService->getConnection()->createQueryBuilder();
 
             $post = $queryBuilder
                 ->select("*")
@@ -49,7 +48,7 @@
         {
             $post = $this->findOne($id);
 
-            if(is_null($post)) {
+            if (is_null($post)) {
                 throw new NotFoundException("Post with id: {$id} not found");
             }
 
@@ -58,7 +57,7 @@
 
         public function save(Post $post): Post
         {
-            $queryBuilder = $this->connection->createQueryBuilder();
+            $queryBuilder = $this->entityService->getConnection()->createQueryBuilder();
 
             $queryBuilder
                 ->insert("posts")
@@ -74,7 +73,7 @@
                 ])
                 ->executeQuery();
 
-            $id = $this->connection->lastInsertId();
+            $id = $this->entityService->save($post);
 
             $post->setId($id);
 

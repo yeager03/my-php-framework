@@ -11,6 +11,7 @@
     use Yeager\Framework\Console\Commands\MigrateCommand;
     use Yeager\Framework\Controller\BaseController;
     use Yeager\Framework\Dbal\ConnectionFactory;
+    use Yeager\Framework\Event\EventDispatcher;
     use Yeager\Framework\HTTP\Middleware\ExtractRouteInfo;
     use Yeager\Framework\HTTP\Middleware\IRequestHandler;
     use Yeager\Framework\HTTP\Middleware\RequestHandler;
@@ -20,8 +21,6 @@
     use Yeager\Framework\HTTP\Kernel;
     use Yeager\Framework\Console\Kernel as ConsoleKernel;
     use Symfony\Component\Dotenv\Dotenv;
-    use Twig\Loader\FilesystemLoader;
-    use Twig\Environment;
     use Doctrine\DBAL\Connection;
     use Yeager\Framework\Session\ISession;
     use Yeager\Framework\Session\Session;
@@ -29,16 +28,19 @@
 
     // Dot env
     $dotenv = new Dotenv();
-    $dotenv->load(BASE_PATH . "/.env");
+    $dotenv->load(dirname(__DIR__) . "/.env");
 
     // Application parameters
-    $routes = require_once BASE_PATH . "/routes/web.php";
+    $BASE_PATH = dirname(__DIR__);
+    $routes = require_once $BASE_PATH . "/routes/web.php";
     $APP_ENV = $_ENV["APP_ENV"] ?? "development";
-    $VIEWS_PATH = BASE_PATH . "/views";
+    $VIEWS_PATH = $BASE_PATH . "/views";
     $DATABASE_URL = "pdo-mysql://lamp:lamp@database:3306/lamp?charset=utf8mb4";
 
     // Application services
     $container = new Container();
+
+    $container->add("base-path", new StringArgument($BASE_PATH));
 
     $container->delegate(new ReflectionContainer(true));
 
@@ -51,11 +53,13 @@
     $container->add(IRequestHandler::class, RequestHandler::class)
         ->addArgument($container);
 
+    $container->addShared(EventDispatcher::class);
+
     $container->add(Kernel::class)
         ->addArguments([
-            IRouter::class,
             $container,
-            IRequestHandler::class
+            IRequestHandler::class,
+            EventDispatcher::class
         ]);
 
     $container->addShared(ISession::class, Session::class);
@@ -90,7 +94,7 @@
 
     $container->add("console:migrate", MigrateCommand::class)
         ->addArgument(Connection::class)
-        ->addArgument(new StringArgument(BASE_PATH . "/database/migrations"));
+        ->addArgument(new StringArgument($BASE_PATH . "/database/migrations"));
 
     $container->add(RouterDispatch::class)
         ->addArguments([
